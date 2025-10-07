@@ -1,0 +1,64 @@
+ 
+#include <AccelStepper.h>
+ 
+#define step_pin 3
+#define dir_pin 2
+#define M0 4
+#define M1 5
+#define M2 6
+#define pressure A0
+//int const potPin = A1;  // analog pin used to connect the potentiometer
+ 
+// Create an instance of the AccelStepper class
+AccelStepper stepper(1, step_pin, dir_pin);
+ 
+void setup() {
+  Serial.begin(9600);
+  pinMode(M0, OUTPUT);
+  pinMode(M1, OUTPUT);
+  pinMode(M2, OUTPUT);
+  pinMode(pressure, INPUT);
+  pinMode(dir_pin, OUTPUT);
+}
+ 
+void loop() {
+  digitalWrite(dir_pin, HIGH); // direction enabled?
+  digitalWrite(M0, LOW);
+  digitalWrite(M1, LOW);
+  digitalWrite(M2, LOW);
+ 
+//pressure can be 0-1023
+ 
+  if(analogRead(pressure) < 1023 && analogRead(pressure) >= 700){
+    stepper.setMaxSpeed(600);
+    stepper.setSpeed(600);
+    stepper.setAcceleration(600);
+    stepper.runSpeed();
+ 
+    }
+    else if(analogRead(pressure) < 700 && analogRead(pressure) >= 550){
+      stepper.setMaxSpeed(400);
+      stepper.setSpeed(400);
+      stepper.setAcceleration(400);
+      stepper.runSpeed();
+    }
+    else if(analogRead(pressure) < 550 && analogRead(pressure) >= 350){
+      stepper.setMaxSpeed(200);
+      stepper.setSpeed(200);
+      stepper.setAcceleration(200);
+      stepper.runSpeed();
+    }
+    else if(analogRead(pressure) < 350 && analogRead(pressure) >= 100){
+      stepper.setMaxSpeed(100);
+      stepper.setSpeed(100);
+      stepper.setAcceleration(100);
+      stepper.runSpeed();
+    }
+    else{
+      stepper.setMaxSpeed(0);
+      stepper.setSpeed(0);
+      stepper.setAcceleration(0);
+      stepper.runSpeed();
+    }
+ 
+  }
