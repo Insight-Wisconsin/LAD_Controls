@@ -1,0 +1,39 @@
+ 
+#include <AccelStepper.h>
+ 
+#define step_pin 3
+#define dir_pin 2
+#define M0 4
+#define M1 5
+#define M2 6
+#define pressure A0
+ 
+// Create an instance of the AccelStepper class
+AccelStepper stepper(1, step_pin, dir_pin);
+ 
+void setup() {
+  Serial.begin(9600);
+  pinMode(M0, OUTPUT);
+  pinMode(M1, OUTPUT);
+  pinMode(M2, OUTPUT);
+  pinMode(pressure, INPUT);
+  pinMode(dir_pin, OUTPUT);
+}
+ 
+void loop() {
+  digitalWrite(dir_pin, HIGH); // direction enabled
+  digitalWrite(M0, LOW);
+  digitalWrite(M1, LOW);
+  digitalWrite(M2, LOW);
+ 
+  stepper.setSpeed(map(analogRead(pressure), 0, 1023, 0, 600);
+  stepper.runSpeed()
+//pressure can be 0-1023
+ 
+// fill it in with pressure dependent speed! think about what intervals you would want and how much you would want the speed to change by for each interval. 
+// notes: analogRead(pressure) will get you the value from the pressure pad from 0-1023 that tells you how hard it is being clicked 
+//  - if the value is 0, the pressure pad is not being pressed at all. Be sure to account for a small error due to the sensitivity of the pressure pad (ex. if it reads a value slightly over 0 like 10, it's probably not being pressed intentionally)
+//  - stepper.setSpeed(x); - will set the speed to the value of x. the range of speeds is from 0-600. it can technically be negative too, but don't worry about that quite yet. 
+//           --> something to think about: what WOULD happen if you set the speed to a negative value?
+//  - stepper.runSpeed();  - will run the motor at the speed you set previously.
+  }
