@@ -4,10 +4,12 @@ int IN1pin = 27;
 int IN2pin = 14;
 int pressurePin1 = 34;  // Pressure pad 1 (forward)
 int pressurePin2 = 35;  // Pressure pad 2 (reverse)
+int potPin = 33;
 
 // float speedMultiplier = 0.5;
 int pressureValue1 = 0;
 int pressureValue2 = 0;
+int potValue = 0;
 
 // PWM config
 const int pwmFreq = 5000;
@@ -25,21 +27,25 @@ void setup() {
 void loop() {
   pressureValue1 = analogRead(pressurePin1);
   pressureValue2 = analogRead(pressurePin2);
+  potValue = analogRead(potPin);
 
   Serial.print("Pressure 1 (Forward): ");
   Serial.print(pressureValue1);
   Serial.print("  |  Pressure 2 (Reverse): ");
   Serial.println(pressureValue2);
 
+  Serial.print("Pot pin Value: ");
+  Serial.println(potValue);
+
   int speed = 0;
 
-  if (pressureValue1 > 40 && pressureValue1 > pressureValue2) {
+  if (pressureValue1 > 40 && pressureValue1 > pressureValue2 && potValue > 1000 && potValue < 3000) {
     speed = map(pressureValue1, 0, 4095, 0, 255);  // use 4095 for ESP32
     // Move Forward
     digitalWrite(IN1pin, HIGH);
     digitalWrite(IN2pin, LOW);
     ledcWrite(ENApin, speed); // forward
-  } else if (pressureValue2 > 40 && pressureValue2 > pressureValue1) {
+  } else if (pressureValue2 > 40 && pressureValue2 > pressureValue1 && potValue < 3000 && potValue > 1000) {
     speed = map(pressureValue2, 0, 4095, 0, 255);
     // Move Reverse
     digitalWrite(IN1pin, LOW);
