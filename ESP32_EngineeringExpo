@@ -1,0 +1,56 @@
+// === PIN DEFINITIONS ===
+int ENApin = 26;
+int IN1pin = 27;
+int IN2pin = 14;
+int pressurePin1 = 34;  // Pressure pad 1 (forward)
+int pressurePin2 = 35;  // Pressure pad 2 (reverse)
+
+// float speedMultiplier = 0.5;
+int pressureValue1 = 0;
+int pressureValue2 = 0;
+
+// PWM config
+const int pwmFreq = 5000;
+const int pwmResolution = 8;
+
+void setup() {
+  pinMode(IN1pin, OUTPUT);
+  pinMode(IN2pin, OUTPUT);
+
+  ledcAttach(ENApin, pwmFreq, pwmResolution);
+
+  Serial.begin(115200);
+}
+
+void loop() {
+  pressureValue1 = analogRead(pressurePin1);
+  pressureValue2 = analogRead(pressurePin2);
+
+  Serial.print("Pressure 1 (Forward): ");
+  Serial.print(pressureValue1);
+  Serial.print("  |  Pressure 2 (Reverse): ");
+  Serial.println(pressureValue2);
+
+  int speed = 0;
+
+  if (pressureValue1 > 40 && pressureValue1 > pressureValue2) {
+    speed = map(pressureValue1, 0, 4095, 0, 255);  // use 4095 for ESP32
+    // Move Forward
+    digitalWrite(IN1pin, HIGH);
+    digitalWrite(IN2pin, LOW);
+    ledcWrite(ENApin, speed); // forward
+  } else if (pressureValue2 > 40 && pressureValue2 > pressureValue1) {
+    speed = map(pressureValue2, 0, 4095, 0, 255);
+    // Move Reverse
+    digitalWrite(IN1pin, LOW);
+    digitalWrite(IN2pin, HIGH);
+    ledcWrite(ENApin, speed); // backwards
+  } else {
+    // Stop
+    digitalWrite(IN1pin, LOW);
+    digitalWrite(IN2pin, LOW);
+    ledcWrite(ENApin, 0);
+  }
+
+  delay(100);
+}
