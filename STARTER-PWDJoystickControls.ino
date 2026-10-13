@@ -19,7 +19,7 @@
  * and replace analogWrite with ledcWrite (see notes at bottom).
  */
 
-// ---------- Pins (change to match your wiring) ----------
+// ---------- Pins (change to match wiring) ----------
 const int PIN_JOY_X  = A0;  // left/right axis
 const int PIN_JOY_Y  = A1;  // forward/back axis
 const int PIN_ESTOP  = 2;   // NC e-stop to GND, INPUT_PULLUP
@@ -29,7 +29,7 @@ const int PIN_L_DIR  = 4;   // left motor direction
 const int PIN_R_PWM  = 6;   // right motor PWM
 const int PIN_R_DIR  = 7;   // right motor direction
 
-// ---------- Tunable parameters (this is what the team tunes) ----------
+// ---------- Tunable parameters (team tests and tunes) ----------
 const int   ADC_MAX        = 1023;
 const float DEAD_ZONE      = 0.12f;  // fraction of full deflection ignored (raise for more tremor)
 const float FILTER_ALPHA   = 0.15f;  // 0..1, smaller = smoother but laggier
